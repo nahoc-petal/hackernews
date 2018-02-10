@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, StatusBar } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
@@ -12,7 +12,7 @@ import Row from './Row'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppColors.brand.secondary,
+    backgroundColor: AppColors.brand.background,
   },
 })
 
@@ -32,24 +32,39 @@ class MainScreen extends React.Component {
     })
   }
 
+  keyExtractor = item => item.id;
+
   renderTopStories(topStoriesIds) {
-    topStoriesIds.forEach((storyId) => {
-      this.props.fetchStoryById(storyId).then(response => (
-        this.setState(prevState => ({
-          data: [...prevState.data, response.storyItem],
-        }))
-      ))
+    topStoriesIds.forEach((storyId, key) => {
+      // Top 30 stories
+      if (key < 31) {
+        this.props.fetchStoryById(storyId).then(response => (
+          this.setState(prevState => ({
+            data: [...prevState.data, response.storyItem],
+          }))
+        ))
+      }
     })
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar
+          barStyle="light-content"
+        />
         {this.state.data ?
           <FlatList
             data={this.state.data}
             renderItem={({ item }) => (
-              <Row key={item.id} title={item.title} />)}
+              <Row
+                keyExtractor={this.keyExtractor(item)}
+                id={item.id}
+                by={item.by}
+                title={item.title}
+                url={item.url}
+                time={item.time}
+              />)}
           /> : null }
       </View>
     )
@@ -77,8 +92,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchStoryById(storyId)),
   fetchTopStoriesIds: () =>
     dispatch(fetchTopStoriesIds()),
-  loginScreen: () =>
-    dispatch(NavigationActions.navigate({ routeName: 'Login' })),
 })
 
 MainScreen.navigationOptions = {

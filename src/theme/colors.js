@@ -1,8 +1,9 @@
 // Brand colors
 const brand = {
   brand: {
-    primary: '#ee6f2e',
-    secondary: '#f6f6f0',
+    primary: '#ff6600',
+    secondary: '#828282',
+    background: '#f6f6f0',
   },
 }
 
