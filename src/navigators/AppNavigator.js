@@ -1,17 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { addNavigationHelpers, StackNavigator } from 'react-navigation';
-import LoginScreen from '../components/LoginScreen';
-import MainScreen from '../components/MainScreen';
-import ProfileScreen from '../components/ProfileScreen';
-import { addListener } from '../utils/redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addNavigationHelpers, StackNavigator } from 'react-navigation'
+import LoginScreen from './../components/LoginScreen'
+import MainScreen from './../components/MainScreen'
+import { addListener } from '../utils/redux'
 
 export const AppNavigator = StackNavigator({
   Login: { screen: LoginScreen },
   Main: { screen: MainScreen },
-  Profile: { screen: ProfileScreen },
-});
+})
 
 class AppWithNavigationState extends React.Component {
   static propTypes = {
@@ -20,7 +18,7 @@ class AppWithNavigationState extends React.Component {
   };
 
   render() {
-    const { dispatch, nav } = this.props;
+    const { dispatch, nav } = this.props
     return (
       <AppNavigator
         navigation={addNavigationHelpers({
@@ -29,12 +27,12 @@ class AppWithNavigationState extends React.Component {
           addListener,
         })}
       />
-    );
+    )
   }
 }
 
 const mapStateToProps = state => ({
   nav: state.nav,
-});
+})
 
-export default connect(mapStateToProps)(AppWithNavigationState);
+export default connect(mapStateToProps)(AppWithNavigationState)

@@ -1,16 +1,24 @@
 // @flow
 
-import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import AppReducer from './reducers';
-import AppWithNavigationState from './navigators/AppNavigator';
-import { middleware } from './utils/redux';
+import React from 'react'
+import { Provider } from 'react-redux'
+import thunkMiddleware from 'redux-thunk'
+import { createLogger } from 'redux-logger'
+import { createStore, applyMiddleware, compose } from 'redux'
+import AppReducer from './reducers'
+import AppWithNavigationState from './navigators/AppNavigator'
 
-const store = createStore(
-  AppReducer,
-  applyMiddleware(middleware),
-);
+const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ })
+
+function configureStore(initialState) {
+  const enhancer = compose(applyMiddleware(
+    thunkMiddleware,
+    loggerMiddleware,
+  ))
+  return createStore(AppReducer, initialState, enhancer)
+}
+
+const store = configureStore({})
 
 class ReduxExampleApp extends React.Component {
   render() {
@@ -18,8 +26,8 @@ class ReduxExampleApp extends React.Component {
       <Provider store={store}>
         <AppWithNavigationState />
       </Provider>
-    );
+    )
   }
 }
 
-export default ReduxExampleApp;
+export default ReduxExampleApp
