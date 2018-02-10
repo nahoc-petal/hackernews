@@ -6,7 +6,7 @@ import {
 export default function searchFilters(
   state = {
     isFetching: false,
-    topStories: [],
+    topStoriesItems: [],
   },
   action,
 ) {
@@ -18,7 +18,7 @@ export default function searchFilters(
     case RECEIVE_TOP_STORIES:
       return Object.assign({}, state, {
         isFetching: false,
-        topStories: action.topStories,
+        topStoriesItems: action.topStories,
       })
     default:
       return state

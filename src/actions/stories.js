@@ -13,11 +13,11 @@ function requestTopStories() {
 function receiveTopStories(json) {
   return {
     type: RECEIVE_TOP_STORIES,
-    topStories: json,
+    topStoriesItems: json,
   }
 }
 
-export function fetchTopStories() {
+export function fetchTopStoriesIds() {
   return function (dispatch) {
     dispatch(requestTopStories())
     return Api.get('/topstories.json')
