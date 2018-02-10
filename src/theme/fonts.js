@@ -1,7 +1,3 @@
-/**
- * App Theme - Fonts
- */
-
 const fonts = {
   family: {
     raleway: 'Raleway',
@@ -19,8 +15,8 @@ const fonts = {
     half: 1.5,
     double: 2,
   },
-};
+}
 
 export default {
   ...fonts,
-};
+}

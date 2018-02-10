@@ -28,8 +28,8 @@ const icons = {
     width: 22,
     height: 22,
   },
-};
+}
 
 export default {
   ...icons,
-};
+}

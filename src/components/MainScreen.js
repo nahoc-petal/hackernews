@@ -1,9 +1,11 @@
+// @flow
+
 import React from 'react'
-import { StyleSheet, View, Text, Button, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { fetchTopStoriesIds } from './../actions/stories'
+import { fetchStoryById, fetchTopStoriesIds } from './../actions/stories'
 import { AppColors } from './../theme'
 import Row from './Row'
 
@@ -18,18 +20,25 @@ class MainScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: null,
+      data: [],
     }
   }
 
   componentWillMount() {
     this.props.fetchTopStoriesIds().then((response) => {
-      /*this.setState({
-        data: response.topStoriesItems,
-      })*/
-
+      this.renderTopStories(response.topStoriesItems)
     }).catch((error) => {
       console.log(error)
+    })
+  }
+
+  renderTopStories(topStoriesIds) {
+    topStoriesIds.forEach((storyId) => {
+      this.props.fetchStoryById(storyId).then(response => (
+        this.setState(prevState => ({
+          data: [...prevState.data, response.storyItem],
+        }))
+      ))
     })
   }
 
@@ -40,13 +49,8 @@ class MainScreen extends React.Component {
           <FlatList
             data={this.state.data}
             renderItem={({ item }) => (
-              <Row id={item} />)}
+              <Row key={item.id} title={item.title} />)}
           /> : null }
-
-        <Button
-          title="Open Login Screen"
-          onPress={() => console.log(this.state.dataSource)}
-        />
       </View>
     )
   }
@@ -54,22 +58,23 @@ class MainScreen extends React.Component {
 
 MainScreen.propTypes = {
   fetchTopStoriesIds: PropTypes.func.isRequired,
-  topStoriesItems: PropTypes.array,
+  fetchStoryById: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
 }
 
 MainScreen.defaultProps = {
-  topStoriesItems: [],
   isFetching: false,
 }
 
 // MAP STATE TO PROPS
 const mapStateToProps = ({ stories }) => {
-  const { isFetching, topStoriesItems } = stories
-  return { isFetching, topStoriesItems }
+  const { isFetching, topStoriesItems, storyItem } = stories
+  return { isFetching, topStoriesItems, storyItem }
 }
 
 const mapDispatchToProps = dispatch => ({
+  fetchStoryById: storyId =>
+    dispatch(fetchStoryById(storyId)),
   fetchTopStoriesIds: () =>
     dispatch(fetchTopStoriesIds()),
   loginScreen: () =>

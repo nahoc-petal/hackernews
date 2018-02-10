@@ -1,16 +1,12 @@
-/**
- * App Theme - Sizes
- */
+import { Dimensions } from 'react-native'
 
-import { Dimensions, Platform } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-const screenHeight = width < height ? height : width;
-const screenWidth = width < height ? width : height;
-let isSmallScreen = false;
+const { width, height } = Dimensions.get('window')
+const screenHeight = width < height ? height : width
+const screenWidth = width < height ? width : height
+let isSmallScreen = false
 
 if (screenWidth <= 480) {
-  isSmallScreen = true;
+  isSmallScreen = true
 }
 
 export default {
@@ -39,4 +35,4 @@ export default {
     large: 30,
     none: 0,
   },
-};
+}
